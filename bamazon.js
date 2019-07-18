@@ -28,6 +28,7 @@ connection.connect(function(err) {
   console.log("connected as id " + connection.threadId);
   afterConnection();
  
+ 
 });
 
 
@@ -39,27 +40,31 @@ function afterConnection() {
       columnSplitter: ' | ',
       paddingChr: ' . ',
     })
+    
     console.log(columns);
+    selectItems();
     connection.end();
   });
 }
 
+//Function to create User Prompt to allow item selection
+function selectItems () {
 
+inquirer
+.prompt([
+  {
+    type: "input",
+    name: "productID",
+    message:"Please select the ID of the product: ",
+    
+  },
 
-//Create User Prompt to allow item selection
-// inquirer
-// .prompt([
-//   {
-//     type: "input",
-//     name: "",
-//     message:"Please select the ID of the product",
-//     choices: [""]
-//   },
+  {
+    type: "input",
+    name: "productAmount",
+    message: "Please select the amount to purchase: ",
+    
+  }
+])
 
-//   {
-//     type: "input",
-//     name: "",
-//     message: "",
-//     choices: [""]
-//   }
-// ])
+}
