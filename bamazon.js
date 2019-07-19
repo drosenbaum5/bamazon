@@ -43,10 +43,10 @@ function afterConnection() {
       columnSplitter: ' | ',
       paddingChr: '  ',
     })
-    console.log(response)
+    // console.log(response)
     console.log(columns);
     selectItems();
-    connection.end();
+    // connection.end();
   });
 }
 
@@ -75,19 +75,35 @@ function selectItems() {
       purchaseID = productChoice.productID;
 
       
-      console.log(productChoice.productID);
-      console.log(productChoice.productAmount);
+      console.log("Product ID: " + productChoice.productID);
+      console.log("Product Amount: " + productChoice.productAmount);
       updateProductAmount();
 
     })
 }
 
-
+    //Function to update product amount
     function updateProductAmount () {
-      connection.query("UPDATE products SET stock_quantity = ? WHERE product name = ?",
-      // [stock_quantity -= ]
+      connection.query("Select * FROM products WHERE id = ?", purchaseID, function(err,response){
+      var updateQuantity = response[0].stock_quantity - purchaseCount;
+
+      connection.query("UPDATE products SET stock_quantity = ? WHERE id = ?",
+      [updateQuantity, purchaseID], function (err, response) {
+        if (err) throw err;
+        // console.log(response);
+        showTotal();
+       })
+
+    })
+    }
+
+    //Function for grabbing item total and multiplying it by number of items
+    function showTotal () {
+     connection.query("Select * FROM products WHERE id = ?", purchaseID, function (err,response){
+      console.log("You purchased " + purchaseCount + " " + response[0].product_name)
+      console.log("Your Total is: $" + response[0].price * purchaseCount);
+      connection.end();
+    
+    })
       
-      )
-
-
     }
